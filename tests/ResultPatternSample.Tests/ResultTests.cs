@@ -1,4 +1,5 @@
-﻿using ResultPatternSample.Core;
+﻿using FluentAssertions;
+using ResultPatternSample.Core;
 
 namespace ResultPatternSample.Tests;
 
@@ -9,9 +10,9 @@ public class ResultTests
     {
         var result = Result.Ok();
 
-        Assert.True(result.Success);
-        Assert.Null(result.Error);
-        Assert.False(result.Failure);
+        result.Success.Should().BeTrue();
+        result.Error.Should().BeNull();
+        result.Failure.Should().BeFalse();
     }
 
     [Fact]
@@ -20,9 +21,9 @@ public class ResultTests
         var errorMsg = "Error occurred";
         var result = Result.Fail(errorMsg);
 
-        Assert.False(result.Success);
-        Assert.Equal(errorMsg, result.Error);
-        Assert.True(result.Failure);
+        result.Success.Should().BeFalse();
+        result.Error.Should().Be(errorMsg);
+        result.Failure.Should().BeTrue();
     }
 
     [Fact]
@@ -31,10 +32,10 @@ public class ResultTests
         var value = 123;
         var result = Result<int>.Ok(value);
 
-        Assert.True(result.Success);
-        Assert.Null(result.Error);
-        Assert.False(result.Failure);
-        Assert.Equal(value, result.Value);
+        result.Success.Should().BeTrue();
+        result.Error.Should().BeNull();
+        result.Failure.Should().BeFalse();
+        result.Value.Should().Be(value);
     }
 
     [Fact]
@@ -43,8 +44,8 @@ public class ResultTests
         var errorMsg = "Value error";
         var result = Result<int>.Fail(errorMsg);
 
-        Assert.False(result.Success);
-        Assert.Equal(errorMsg, result.Error);
-        Assert.True(result.Failure);
+        result.Success.Should().BeFalse();
+        result.Error.Should().Be(errorMsg);
+        result.Failure.Should().BeTrue();
     }
 }
